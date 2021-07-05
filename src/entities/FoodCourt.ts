@@ -15,4 +15,10 @@ export class FoodCourt {
 
     @OneToMany(() => Restaurant , restaurant =>  restaurant.foodCourt)
     restaurants: Restaurant[];
+
+    constructor(id: string, name: string, location: string) {
+        this.id = id;
+        this.name = name;
+        this.location = location;
+    }
 }
