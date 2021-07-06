@@ -23,4 +23,13 @@ export class Restaurant {
 
     @OneToMany(() => Order, order => order.restaurant)
     orders: Order[];
+
+    constructor(id: string, name: string, logoImageUrl: string, foodCourt: FoodCourt) {
+        this.id = id;
+        this.name = name;
+        //this.menu = menu;
+        //this.orders = orders;
+        this.logoImageUrl = logoImageUrl;
+        this.foodCourt = foodCourt;
+    }
 }

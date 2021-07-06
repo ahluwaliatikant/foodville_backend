@@ -25,4 +25,14 @@ export class Item{
 
     @ManyToOne(() => Restaurant, restaurant => restaurant.menu)
     restaurant: Restaurant;
+
+    constructor(id: string, name: string, description: string, price: number, restaurant: Restaurant, imageUrl: string) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.restaurant = restaurant;
+        this.imageUrl = imageUrl;
+    }
+
 }

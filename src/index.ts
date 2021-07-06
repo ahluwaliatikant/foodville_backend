@@ -3,6 +3,8 @@ import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {User} from "./entities/User";
 import { foodCourtsRoute } from './routes/foodCourt';
+import { menuRoute } from './routes/menu';
+import { restaurantsRoute } from './routes/restaurant';
 var bodyParser = require('body-parser')
 
 const app = express();
@@ -10,6 +12,8 @@ app.use(express.json())
 app.use(bodyParser.urlencoded())
 app.use(bodyParser.json())
 app.use('/api/foodcourts' , foodCourtsRoute)
+app.use('/api/restaurants' , restaurantsRoute)
+app.use('/api/menu' , menuRoute)
 
 createConnection().then(async connection => {
 

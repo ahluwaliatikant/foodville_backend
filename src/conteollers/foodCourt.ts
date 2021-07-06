@@ -39,6 +39,7 @@ export async function getFoodCourtById(idParam: string): Promise<FoodCourt> {
     try{
         const foodCourt = await repo
             .createQueryBuilder("foodCourt")
+            .leftJoinAndSelect("foodCourt.restaurants" , "restautant")
             .where("foodCourt.id = :id" , {id: idParam})
             .getOne();
 
@@ -55,6 +56,7 @@ export async function getAllFoodCourts(): Promise<FoodCourt[]> {
     try{
         const foodCourts = await repo
             .createQueryBuilder("foodCourt")
+            .leftJoinAndSelect("foodCourt.restaurants" , "restautant")
             .getMany()
 
         return foodCourts;
