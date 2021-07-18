@@ -20,9 +20,6 @@ export class Item{
     @Column()
     imageUrl: string;
 
-    @ManyToOne(() => Order, order => order.items)
-    order: Order;
-
     @ManyToOne(() => Restaurant, restaurant => restaurant.menu)
     restaurant: Restaurant;
 

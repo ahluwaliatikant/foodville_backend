@@ -6,7 +6,7 @@ interface AddRestaurantData{
     id: string
     name: string
     logoImageUrl: string
-    foodCourt: FoodCourt
+    foodCourt: string
 }
 
 export async function addRestaurant(data: AddRestaurantData): Promise<Restaurant>  {
@@ -20,7 +20,7 @@ export async function addRestaurant(data: AddRestaurantData): Promise<Restaurant
     const foodCourtRepo = await getRepository(FoodCourt);
 
     try{
-        const foodCourt = await foodCourtRepo.findOne(data.foodCourt.id);
+        const foodCourt = await foodCourtRepo.findOne(data.foodCourt);
 
         const restaurant = await restaurantRepo.save(new Restaurant(
                 data.id,
@@ -38,6 +38,8 @@ export async function addRestaurant(data: AddRestaurantData): Promise<Restaurant
 }
 
 export async function getRestaurantById(idParam: string) {
+    if(!idParam) throw new Error("No ID given");
+
     const repo = await getRepository(Restaurant);
 
     try{
@@ -45,8 +47,13 @@ export async function getRestaurantById(idParam: string) {
             .createQueryBuilder("restaurant")
             .where("restaurant.id = :id" , {id: idParam})
             .leftJoinAndSelect("restaurant.menu" , "item")
+            .leftJoinAndSelect("restaurant.orders" , "orders")
             .getOne()
 
+        if(restaurant == null){
+            throw("No restaurant with this id");
+        }
+        
         return restaurant;
     }catch(e){
         throw e;

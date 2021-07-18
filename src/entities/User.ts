@@ -18,4 +18,12 @@ export class User {
 
     @OneToMany(() => Order, order => order.placedBy)
     orders: Order[];
+
+    constructor (id: string , name: string , phoneNumber: string , profilePicUrl: string){
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.profilePicUrl = profilePicUrl;
+    }
+
 }

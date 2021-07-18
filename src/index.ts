@@ -4,7 +4,9 @@ import {createConnection} from "typeorm";
 import {User} from "./entities/User";
 import { foodCourtsRoute } from './routes/foodCourt';
 import { menuRoute } from './routes/menu';
+import { orderRoute } from './routes/order';
 import { restaurantsRoute } from './routes/restaurant';
+import { usersRoute } from './routes/user';
 var bodyParser = require('body-parser')
 
 const app = express();
@@ -14,6 +16,8 @@ app.use(bodyParser.json())
 app.use('/api/foodcourts' , foodCourtsRoute)
 app.use('/api/restaurants' , restaurantsRoute)
 app.use('/api/menu' , menuRoute)
+app.use('/api/users' , usersRoute)
+app.use('/api/orders' , orderRoute)
 
 createConnection().then(async connection => {
 

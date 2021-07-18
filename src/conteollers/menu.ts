@@ -13,10 +13,10 @@ interface addItemData{
 
 
 export async function addItem(data: addItemData): Promise<Item>{
-    if(!data.restaurantId) throw Error("NO RESTAURANT ID");
-    if(!data.name) throw Error("NO NAME");
-    if(!data.description) throw ("NO DESCRIPTION");
-    if(!data.price) throw ("NO PRICE");
+    if(!data.restaurantId) throw new Error("NO RESTAURANT ID");
+    if(!data.name) throw new Error("NO NAME");
+    if(!data.description) throw new Error("NO DESCRIPTION");
+    if(!data.price) throw new Error("NO PRICE");
     if(!data.imageUrl) data.imageUrl = "";
 
     const restaurantRepo = await getRepository(Restaurant);

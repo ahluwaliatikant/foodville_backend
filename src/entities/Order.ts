@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { Item } from "./Item";
 import { Restaurant } from "./Restaurant";
 import { User } from "./User";
@@ -18,13 +18,30 @@ export class Order{
     @ManyToOne(() => User, user => user.orders)
     placedBy: User;
 
-    @OneToMany(() => Item, item => item.order)
-    items: Item[];
+    @ManyToMany(() => Item)
+    @JoinTable()
+    items: Item[]
 
     @ManyToOne(() => Restaurant, restaurant => restaurant.orders)
     restaurant: Restaurant;
 
     @Column()
     totalAmount: number;
+
+    constructor(id: string,
+        placedAt: Date,
+        status: string,
+        placedBy: User,
+        items: Item[],
+        restaurant: Restaurant,
+        totalAmount: number) {
+            this.id = id;
+            this.status = status;
+            this.placedAt = placedAt;
+            this.placedBy = placedBy;
+            this.restaurant = restaurant;
+            this.items = items;
+            this.totalAmount = totalAmount;
+    }
 
 }

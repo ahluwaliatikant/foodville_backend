@@ -9,7 +9,9 @@ route.post('/' , async(req,res) => {
         const item  = await addItem(req.body)
         return res.status(201).json({item})
     }catch(e){
-        throw e;
+        return res.status(422).json({
+            errors: {body: ['add menu failed' , e.message]}
+        })
     }
 })
 
