@@ -20,7 +20,7 @@ export async function addRestaurant(data: AddRestaurantData): Promise<Restaurant
     const foodCourtRepo = await getRepository(FoodCourt);
 
     try{
-        const foodCourt = await foodCourtRepo.findOne(data.foodCourt);
+        const foodCourt = await foodCourtRepo.findOne(data.foodCourt); 
 
         const restaurant = await restaurantRepo.save(new Restaurant(
                 data.id,

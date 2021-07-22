@@ -65,3 +65,58 @@ export async function placeOrder(data: OrderData): Promise<Order> {
     }
 
 }
+
+
+export async function getOrderById(idParam: string) {
+    if(!idParam) throw new Error("No ID");
+
+    const repo = await getRepository(Order);
+
+    try{
+        const order = repo
+            .createQueryBuilder("order")
+            .where("order.id = :id" , {id: idParam})
+            .leftJoinAndSelect("order.items" , "item")
+            .getOne()
+
+        return order
+    }
+    catch(e){
+        throw e;
+    }
+}
+
+export async function setOrderStatus(id: string , status: string) {
+    if(!id) throw new Error("NO ID");
+
+    const repo = await getRepository("Order")
+    try{
+        await repo
+        .createQueryBuilder("order")
+        .update(Order)
+        .set({ status: status})
+        .where("order.id = :id", {id: id})
+        .execute()
+    }
+    catch(e){
+        throw(e);
+    }
+}
+
+export async function getOrdersByRestaurant(restaurantId: string, status: string) {
+    if(!restaurantId) throw new Error("no id given");
+
+    const repo = await getRepository("Order")
+
+    try{
+        const orders = await repo
+            .createQueryBuilder("order")
+            .where("order.restaurant.id = :resId" , {resId: restaurantId})
+            .where("order.status = :status" , {status: status})
+            .getMany()
+        
+        return orders;
+    }catch(e){
+        throw e;
+    }
+}
