@@ -18,6 +18,7 @@ route.post('/' , async(req,res) => {
 route.get('/:id' , async(req,res) => {
     try{
         const menu = await getMenu(req.params.id);
+        console.log(menu);
         return res.status(201).json({menu})
     }catch(e){
         return res.status(422).json({

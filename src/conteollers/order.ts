@@ -25,6 +25,7 @@ export async function placeOrder(data: OrderData): Promise<Order> {
     if(!data.placedAt) throw new Error("No placedAt received");
     if(!data.restaurant) throw new Error("No restaurant received");
     if(!data.totalAmount) throw new Error("No total amount given");
+    if(!data.placedBy) throw new Error("No placedBy received");
     if(!data.items) throw new Error("No items");
 
 
@@ -111,11 +112,36 @@ export async function getOrdersByRestaurant(restaurantId: string, status: string
     try{
         const orders = await repo
             .createQueryBuilder("order")
+            .leftJoinAndSelect("order.items" , "item")
+            .leftJoinAndSelect("order.placedBy" , "placedBy")
+            .leftJoinAndSelect("order.restaurant" , "restaurant")
             .where("order.restaurant.id = :resId" , {resId: restaurantId})
             .where("order.status = :status" , {status: status})
             .getMany()
         
         return orders;
+    }catch(e){
+        throw e;
+    }
+}
+
+export async function getOrdersByUser(userId: string, status: string) {
+    if(!userId) throw new Error("No userID given");
+    if(!status) throw new Error("No status given");
+
+    const repo = await getRepository(Order);
+
+    try{
+        const orders = await repo
+            .createQueryBuilder("order")
+            .leftJoinAndSelect("order.items" , "item")
+            .leftJoinAndSelect("order.restaurant" , "restaurant")
+            .leftJoinAndSelect("order.placedBy" , "placedBy")
+            .where("order.placedBy.id = :userId" , {userId: userId})
+            .where("order.status = :status" , {status: status})
+            .getMany()
+
+        return orders; 
     }catch(e){
         throw e;
     }
