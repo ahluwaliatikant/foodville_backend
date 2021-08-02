@@ -19,6 +19,11 @@ interface OrderData {
     placedBy: string
 }
 
+interface UpdateStatusData {
+    id: string
+    status: string
+}
+
 export async function placeOrder(data: OrderData): Promise<Order> {
     if(!data.id) throw new Error("No id received");
     if(!data.status) throw new Error("No status received");
@@ -145,4 +150,45 @@ export async function getOrdersByUser(userId: string, status: string) {
     }catch(e){
         throw e;
     }
+}
+
+
+export async function updateOrderStatus(data: UpdateStatusData) {
+    if(!data.id) throw new Error ("NO ID GIVEN");
+    if(!data.status) throw new Error ("NO STATUS GIVEN");
+
+    const repo = await getRepository(Order);
+
+    try{
+        await repo
+            .createQueryBuilder("order")
+            .update(Order)
+            .set({status: "completed"})
+            .where("order.status = :status" , {status: data.status})
+            .execute();
+            
+    }catch(e){
+        throw e;
+    }
+
+}
+
+
+export async function deleteOrder(idParam: string) {
+    if(!idParam) throw new Error("NO ID GIVEN");
+
+    const repo =  await getRepository(Order);
+
+    try{
+        repo
+        .createQueryBuilder("order")
+        .delete()
+        .from(Order)
+        .where("order.id = :id", {id: idParam})
+        .execute()
+
+    }catch(e){
+        throw e;
+    }
+    
 }

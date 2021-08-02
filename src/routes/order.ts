@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getOrdersByRestaurant, getOrdersByUser, placeOrder } from "../conteollers/order";
+import { deleteOrder, getOrdersByRestaurant, getOrdersByUser, placeOrder, updateOrderStatus } from "../conteollers/order";
 import { restaurantsRoute } from "./restaurant";
 
 const route = Router();
@@ -43,4 +43,27 @@ route.get("/restaurants/:id/:status" , async(req , res) => {
     }
 })
 
+route.put("/" , async(req , res) => {
+    try{
+        console.log(req.body);
+        await updateOrderStatus(req.body);
+        return res.status(201);
+    }catch(e){
+        return res.status(422).json({
+            error: {body: ['failed to update status' , e.message]}
+        })
+    }
+})
+
+route.put("/:id" , async(req,res)=> {
+    try{
+        const id = req.params.id;
+        await deleteOrder(id);
+        return res.status(201);
+    }catch(e){
+        return res.status(422).json({
+            error: {body: ['failed to update status' , e.message]}
+        })
+    }
+})
 export const orderRoute = route;
