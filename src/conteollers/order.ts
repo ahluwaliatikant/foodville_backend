@@ -17,6 +17,7 @@ interface OrderData {
     restaurant: string,
     totalAmount: number,
     placedBy: string
+    quantityMap: Map<string,number>
 }
 
 interface UpdateStatusData {
@@ -32,7 +33,7 @@ export async function placeOrder(data: OrderData): Promise<Order> {
     if(!data.totalAmount) throw new Error("No total amount given");
     if(!data.placedBy) throw new Error("No placedBy received");
     if(!data.items) throw new Error("No items");
-
+    if(!data.quantityMap) throw new Error("Map nt given");
 
     const orderRepo = await getRepository(Order);
     const itemRepo = await getRepository(Item);
@@ -50,7 +51,9 @@ export async function placeOrder(data: OrderData): Promise<Order> {
 
         const restaurant = await restaurantRepo.findOne(data.restaurant);
         const user = await userRepo.findOne(data.placedBy);
-
+        const json = JSON.stringify(data.quantityMap);
+        console.log("JSON STRINGIFIED:");
+        console.log(json);
         console.log(restaurant);
         console.log(user);
 
@@ -61,7 +64,8 @@ export async function placeOrder(data: OrderData): Promise<Order> {
             user,
             itemList,
             restaurant,
-            data.totalAmount
+            data.totalAmount,
+            json,
         )); 
         
         console.log(order);
@@ -124,6 +128,7 @@ export async function getOrdersByRestaurant(restaurantId: string, status: string
             .where("order.status = :status" , {status: status})
             .getMany()
         
+        
         return orders;
     }catch(e){
         throw e;
@@ -145,7 +150,7 @@ export async function getOrdersByUser(userId: string, status: string) {
             .where("order.placedBy.id = :userId" , {userId: userId})
             .where("order.status = :status" , {status: status})
             .getMany()
-
+            
         return orders; 
     }catch(e){
         throw e;
@@ -158,15 +163,17 @@ export async function updateOrderStatus(data: UpdateStatusData) {
     if(!data.status) throw new Error ("NO STATUS GIVEN");
 
     const repo = await getRepository(Order);
-
+    console.log("repo done");
     try{
         await repo
             .createQueryBuilder("order")
             .update(Order)
-            .set({status: "completed"})
-            .where("order.status = :status" , {status: data.status})
+            .set({status: data.status})
+            .where("order.id = :id", {id: data.id})
             .execute();
-            
+        console.log("DONE ORDER UPDATE");
+        
+        return true;
     }catch(e){
         throw e;
     }
@@ -181,14 +188,15 @@ export async function deleteOrder(idParam: string) {
 
     try{
         repo
-        .createQueryBuilder("order")
-        .delete()
-        .from(Order)
-        .where("order.id = :id", {id: idParam})
-        .execute()
+            .createQueryBuilder("order")
+            .delete()
+            .from(Order)
+            .where("order.id = :id", {id: idParam})
+            .execute()
 
+        console.log("ORDER DELETED");
+        return;
     }catch(e){
         throw e;
     }
-    
 }

@@ -28,13 +28,17 @@ export class Order{
     @Column()
     totalAmount: number;
 
+    @Column()
+    quantityMap: string
+
     constructor(id: string,
         placedAt: Date,
         status: string,
         placedBy: User,
         items: Item[],
         restaurant: Restaurant,
-        totalAmount: number) {
+        totalAmount: number,
+        quantityMap: string) {
             this.id = id;
             this.status = status;
             this.placedAt = placedAt;
@@ -42,6 +46,7 @@ export class Order{
             this.restaurant = restaurant;
             this.items = items;
             this.totalAmount = totalAmount;
+            this.quantityMap = quantityMap
     }
 
 }

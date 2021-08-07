@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { deleteOrder, getOrdersByRestaurant, getOrdersByUser, placeOrder, updateOrderStatus } from "../conteollers/order";
+import { deleteOrder, getOrderById, getOrdersByRestaurant, getOrdersByUser, placeOrder, updateOrderStatus } from "../conteollers/order";
 import { restaurantsRoute } from "./restaurant";
 
 const route = Router();
@@ -13,6 +13,19 @@ route.post("/" , async(req , res) => {
     }catch(e){
         return res.status(422).json({
             errors: {body: ['place order failed' , e.message]}
+        })
+    }
+})
+
+route.get("/:id" , async(req,res)=>{
+    try{
+        const orderId = req.params.id;
+        const order = await getOrderById(orderId);
+        return res.status(201).json({order});
+    }
+    catch(e){
+        return res.status(422).json({
+            error: {body: ["get order failed" , e.message]}
         })
     }
 })
@@ -47,7 +60,7 @@ route.put("/" , async(req , res) => {
     try{
         console.log(req.body);
         await updateOrderStatus(req.body);
-        return res.status(201);
+        return res.status(201).json({"message": "order updated"});
     }catch(e){
         return res.status(422).json({
             error: {body: ['failed to update status' , e.message]}
@@ -59,7 +72,7 @@ route.put("/:id" , async(req,res)=> {
     try{
         const id = req.params.id;
         await deleteOrder(id);
-        return res.status(201);
+        return res.status(201).json({"message" : "order deleted"});
     }catch(e){
         return res.status(422).json({
             error: {body: ['failed to update status' , e.message]}
