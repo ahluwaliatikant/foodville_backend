@@ -1,11 +1,19 @@
 # Backend for the FoodVille app
 FoodVille is a mobile application which enables you to order food in a food court right from your table.
 
-### Link to the application repo
+## Link to the application repo
 https://github.com/ahluwaliatikant/foodville
 
-## Built With
+## The Problem
+Food Courts are the most crowded places in any mall. Thus getting food there is a huge hassle as one has to wait in long queues just to place the order. Also one has to keep track as to when the order gets ready. FoodVille is a one stop solution for all these peoblems.
+### Features
+- View all restaurants in the food court within the app.
+- Place orders at multiple restaurants right from the app.
+- View all your orders within the app.
+- Restaurants can also view all placed and completed orders in the app.
+- Restaurants can mark the orders and completed and users can view them in the app.
 
+## Built With
 ### Backend
 - NodeJS + TypeScript <code><img height="26" src="https://blog.yavilevich.com/wp-content/uploads/2015/02/nodejs-logo.png"></code>
 - Database - MySQL + TypeORM <code><img height="26" src="https://d1.awsstatic.com/asset-repository/products/amazon-rds/1024px-MySQL.ff87215b43fd7292af172e2a5d9b844217262571.png"></code>
